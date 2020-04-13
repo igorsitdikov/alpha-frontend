@@ -18,9 +18,6 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
       requiresAuth: true,
@@ -29,9 +26,6 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue'),
     meta: {
       requiresAuth: true,
@@ -41,12 +35,17 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     meta: {
       guest: true,
+    },
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import(/* webpackChunkName: "logout" */ '../views/Logout.vue'),
+    meta: {
+      requiresAuth: true,
     },
   },
 ];
@@ -66,7 +65,7 @@ router.beforeEach((to, from, next) => {
     } else {
       const user = JSON.parse(localStorage.getItem('user'));
       if (to.matched.some((record) => record.meta.isAdmin)) {
-        if (user.isAdmin === 1) {
+        if (user.role === 'admin') {
           next();
         } else {
           next({ name: 'Home' });
