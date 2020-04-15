@@ -24,6 +24,14 @@ const routes = [
     },
   },
   {
+    path: '/charts',
+    name: 'Charts',
+    component: () => import(/* webpackChunkName: "charts" */ '../views/Charts.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/admin',
     name: 'Admin',
     component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue'),
