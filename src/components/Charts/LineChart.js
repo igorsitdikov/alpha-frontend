@@ -46,7 +46,6 @@ export default {
           this.chartData,
           this.extraOptions,
         );
-        // this.htmlLegend = this.generateLegend();
       }
     }, { immediate: true });
   },
