@@ -10,6 +10,7 @@ export default new Vuex.Store({
     role: false,
     authorized: false,
     objectId: '',
+    userId: '',
   },
   mutations: {
     setRole(state, admin) {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     setObjectId(state, id) {
       Vue.set(state, 'objectId', id);
+    },
+    setUserId(state, id) {
+      Vue.set(state, 'userId', id);
     },
     setAuthorized(state, authorized) {
       Vue.set(state, 'authorized', authorized);

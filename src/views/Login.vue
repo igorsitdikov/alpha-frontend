@@ -38,6 +38,8 @@ export default {
       if (this.password.length > 0) {
         const { data } = await usersRepository.login(this.email, this.password);
         const isAdmin = data.user.role;
+        // eslint-disable-next-line no-underscore-dangle
+        this.$store.commit('setUserId', data.user._id);
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('jwt', data.token);
         if (localStorage.getItem('jwt') != null) {

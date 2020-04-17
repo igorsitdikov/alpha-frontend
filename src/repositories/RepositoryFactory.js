@@ -3,6 +3,7 @@ import entriesRepository from './entriesRepository';
 import usersRepository from './usersRepository';
 import gisRepository from './gisRepository';
 import chartsRepository from './chartsRepository';
+import apiRepository from './apiRepository';
 
 const repositories = {
   objects: objectsRepository,
@@ -10,6 +11,7 @@ const repositories = {
   users: usersRepository,
   gis: gisRepository,
   charts: chartsRepository,
+  api: apiRepository,
 };
 
 const RepositoryFactory = {

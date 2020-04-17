@@ -32,6 +32,7 @@ export default {
   }),
   methods: {
     setObjectIdToStore() {
+      // 5e97f64afbf8702e37904a34  5e96b8ad45d59e192c9a7caa
       this.$store.commit('setObjectId', '5e96b8ad45d59e192c9a7caa');
     },
     async drawChart() {
