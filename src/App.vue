@@ -5,6 +5,7 @@
       <router-link v-if="$store.state.authorized" to="/about">About</router-link>
       <router-link v-if="$store.state.authorized" to="/projects">Projects</router-link>
       <router-link v-if="$store.state.authorized" to="/charts">Charts</router-link>
+      <router-link v-if="$store.state.authorized" to="/maps">Maps</router-link>
       <router-link v-if="$store.state.role" to="/admin">Admin</router-link>
       <router-link v-if="$store.state.authorized" to="/logout">Logout</router-link>
     </div>

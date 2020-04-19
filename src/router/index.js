@@ -32,6 +32,14 @@ const routes = [
     },
   },
   {
+    path: '/maps',
+    name: 'Maps',
+    component: () => import(/* webpackChunkName: "maps" */ '../views/Maps.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/projects',
     name: 'Projects',
     component: () => import(/* webpackChunkName: "projects" */ '../views/Projects.vue'),
