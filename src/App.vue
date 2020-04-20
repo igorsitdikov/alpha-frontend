@@ -1,9 +1,16 @@
 <template>
   <div id="app">
+    <b-sidebar id="sidebar-projects" title="Projects" shadow>
+        <template v-if="$store.state.isProject">
+          <new-project-object></new-project-object>
+        </template>
+        <folder-tree-view></folder-tree-view>
+    </b-sidebar>
     <div id="nav">
+      <b-button v-b-toggle.sidebar-projects> <b-icon icon="briefcase-fill"></b-icon> </b-button>
       <router-link v-if="$store.state.authorized" to="/">Home</router-link>
       <router-link v-if="$store.state.authorized" to="/about">About</router-link>
-      <router-link v-if="$store.state.authorized" to="/projects">Projects</router-link>
+      <router-link v-if="$store.state.authorized" to="/news">News</router-link>
       <router-link v-if="$store.state.authorized" to="/charts">Charts</router-link>
       <router-link v-if="$store.state.authorized" to="/maps">Maps</router-link>
       <router-link v-if="$store.state.role" to="/admin">Admin</router-link>
@@ -14,8 +21,14 @@
 </template>
 
 <script>
+import NewProjectObject from './components/Projects/NewProjectObject.vue';
+import FolderTreeView from './components/Projects/FolderTreeView.vue';
+
 export default {
   name: 'app',
+  components: {
+    NewProjectObject, FolderTreeView,
+  },
 };
 </script>
 
@@ -39,5 +52,9 @@ export default {
       color: #42b983;
     }
   }
+}
+
+.sl-vue-tree {
+  margin: auto;
 }
 </style>

@@ -3,15 +3,14 @@
     <h1>This is a chart page</h1>
     <b-container class="bv-example-row">
       <b-row>
-        <b-col cols="12">
-          <p class="text-left">Type word and press enter:</p>
+        <b-col cols="9">
+          <b-form-tags input-id="tags-basic"
+                       separator=" "
+                       remove-on-delete
+                       placeholder="Enter new keywords separated by space"
+                       v-model="keywords" class="mb-2"></b-form-tags>
         </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="10">
-          <input-tag v-model="keywords"></input-tag>
-        </b-col>
-        <b-col cols="2">
+        <b-col cols="3">
           <b-button @click="drawChart">
             <b-icon icon="arrow-repeat"></b-icon>
             Redraw chart
@@ -36,7 +35,6 @@
 </template>
 
 <script>
-import InputTag from 'vue-input-tag';
 import Chart from '../components/Charts/Chart.vue';
 import RepositoryFactory from '../repositories/RepositoryFactory';
 
@@ -46,7 +44,6 @@ export default {
   name: 'Charts',
   components: {
     Chart,
-    InputTag,
   },
   data: () => ({
     dataLoaded: false,
@@ -75,11 +72,6 @@ export default {
 <style scoped>
   h1 {
     font-size: 20px;
-  }
-
-  .text-left {
-    text-align: left;
-    margin-bottom: 0;
   }
   .chart-wrapper {
     margin-top: 50px;

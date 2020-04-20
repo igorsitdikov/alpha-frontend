@@ -40,9 +40,9 @@ const routes = [
     },
   },
   {
-    path: '/projects',
-    name: 'Projects',
-    component: () => import(/* webpackChunkName: "projects" */ '../views/Projects.vue'),
+    path: '/news',
+    name: 'News',
+    component: () => import(/* webpackChunkName: "news" */ '../views/News.vue'),
     meta: {
       requiresAuth: true,
     },

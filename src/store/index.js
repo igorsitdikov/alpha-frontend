@@ -11,10 +11,14 @@ export default new Vuex.Store({
     authorized: false,
     objectId: '',
     userId: '',
+    isProject: false,
   },
   mutations: {
     setRole(state, admin) {
       Vue.set(state, 'role', admin);
+    },
+    setIsProject(state, project) {
+      Vue.set(state, 'isProject', project);
     },
     setObjectId(state, id) {
       Vue.set(state, 'objectId', id);
