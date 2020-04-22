@@ -19,7 +19,7 @@
             :zoom="zoom"
             :center="center"
             :options="mapOptions"
-            style="height: 80vh;"
+            style="z-index: 0; height: 80vh;"
             @update:center="centerUpdate"
             @update:zoom="zoomUpdate"
           >

@@ -52,6 +52,9 @@
             size="sm"
             class="my-0"
           ></b-pagination>
+          <template v-if="loading">
+            <loading></loading>
+          </template>
         </b-col>
       </b-row>
     </b-container>
@@ -60,10 +63,14 @@
 
 <script>
 import RepositoryFactory from '../../repositories/RepositoryFactory';
+import Loading from '../Loader/Loading.vue';
 
 const objectsRepository = RepositoryFactory.get('objects');
 export default {
   name: 'Table',
+  components: {
+    Loading,
+  },
   data: () => ({
     items: [
     ],
@@ -94,6 +101,7 @@ export default {
       title: '',
       content: '',
     },
+    loading: false,
   }),
   mounted() {
     this.$nextTick(async () => {
@@ -108,6 +116,7 @@ export default {
   methods: {
     async getEntries(id) {
       // const id = this.$store.state.objectId;
+      this.loading = true;
       console.log(`selected ${id}`);
       const { data } = await objectsRepository.get(id);
       this.items = data.entries.map((el) => ({
@@ -122,6 +131,7 @@ export default {
       // Set the initial number of items
       this.totalRows = this.items.length;
       console.log(data);
+      this.loading = false;
     },
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;

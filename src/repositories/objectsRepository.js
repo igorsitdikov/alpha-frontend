@@ -18,4 +18,7 @@ export default {
   fetch(id) {
     Repository.patch(`${resource}`, { id });
   },
+  delete(id) {
+    Repository.delete(`${resource}/${id}`);
+  },
 };

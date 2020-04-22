@@ -23,10 +23,7 @@
             <Chart v-bind:charts="chartData"></Chart>
           </template>
           <template v-if="loading">
-            <p>Loading... Please wait</p>
-            <b-spinner small label="Small Spinner" type="grow"></b-spinner>
-            <b-spinner small label="Small Spinner" type="grow"></b-spinner>
-            <b-spinner small label="Small Spinner" type="grow"></b-spinner>
+            <loading></loading>
           </template>
         </b-col>
       </b-row>
@@ -36,6 +33,7 @@
 
 <script>
 import Chart from '../components/Charts/Chart.vue';
+import Loading from '../components/Loader/Loading.vue';
 import RepositoryFactory from '../repositories/RepositoryFactory';
 
 const chartsRepository = RepositoryFactory.get('charts');
@@ -43,7 +41,7 @@ const chartsRepository = RepositoryFactory.get('charts');
 export default {
   name: 'Charts',
   components: {
-    Chart,
+    Chart, Loading,
   },
   data: () => ({
     dataLoaded: false,
