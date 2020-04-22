@@ -83,13 +83,13 @@ export default {
     coordinatesGis: Array,
   },
   methods: {
+    getDateString(date) {
+      return date.toJSON().split('T')[0];
+    },
     formatDate(dStr) {
       const today = new Date();
       today.setUTCHours(0, 0, 0, 0);
-      const getDateString = function (date) {
-        return date.toJSON().split('T')[0];
-      };
-      const todayStr = getDateString(today);
+      const todayStr = this.getDateString(today);
       const pieces = dStr.split('T');
       let formattedDate = pieces[0];
       if (pieces[0] === todayStr) {
