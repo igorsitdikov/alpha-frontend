@@ -9,19 +9,17 @@
       :activatable="activatable"
       :hoverable="hoverable"
       :selection-type="selectionType"
-      :open-on-click="openOnClick"
       :color="color"
       :shaped="shaped"
       :rounded="rounded"
       :active="active"
       @update:active="onUpdate"
-      @update:open="onUpdate"
     >
       <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="!item.isLeaf" @click="onUpdate(item)">
+        <v-icon v-if="!item.isLeaf">
           {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
         </v-icon>
-        <v-icon v-else @click="onUpdate(item)">
+        <v-icon v-else>
           {{ 'mdi-file' }}
         </v-icon>
       </template>
@@ -78,7 +76,9 @@ export default {
     },
     showEntries(node) {
       this.objectId = node.id;
-      this.$root.$emit('showNews', this.objectId);
+      if (this.objectId !== this.$store.state.objectId) {
+        this.$root.$emit('showNews', this.objectId);
+      }
       this.$store.commit('setObjectId', this.objectId);
       this.$store.commit('setIsProject', !node.isLeaf);
     },
