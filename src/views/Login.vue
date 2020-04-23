@@ -1,24 +1,58 @@
 <template>
-  <div>
-    <h4>Login</h4>
-    <form>
-      <label for="email" >E-Mail Address</label>
-      <div>
-        <input id="email" type="email" v-model="email" required autofocus>
-      </div>
-      <div>
-        <label for="password" >Password</label>
-        <div>
-          <input id="password" type="password" v-model="password" required>
-        </div>
-      </div>
-      <div>
-        <button type="submit" @click="handleSubmit">
-          Login
-        </button>
-      </div>
-    </form>
-  </div>
+  <v-app id="inspire">
+    <v-content>
+      <v-container
+        fluid
+        fill-height
+      >
+        <v-layout
+          align-center
+          justify-center
+        >
+          <v-flex
+            xs12
+            sm8
+            md4
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="default"
+                dark
+                flat
+              >
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-card-text>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-text-field
+                    v-model="email"
+                    label="E-mail"
+                    :rules="emailRules"
+                    name="login"
+                    type="text"
+                  ></v-text-field>
+
+                  <v-text-field
+                    v-model="password"
+                    id="password"
+                    label="Password"
+                    :rules="passwordRules"
+                    name="password"
+                    type="password"
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="default" @click="submit">Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -31,11 +65,20 @@ export default {
   data: () => ({
     email: '',
     password: '',
+    valid: true,
+    emailRules: [
+      (v) => !!v || 'E-mail is required',
+      // eslint-disable-next-line no-useless-escape
+      (v) => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+    ],
+    passwordRules: [
+      (v) => !!v || 'Password is required',
+    ],
   }),
   methods: {
-    async handleSubmit(e) {
-      e.preventDefault();
-      if (this.password.length > 0) {
+    async submit(e) {
+      if (this.$refs.form.validate()) {
+        e.preventDefault();
         const { data } = await usersRepository.login(this.email, this.password);
         const isAdmin = data.user.role;
         // eslint-disable-next-line no-underscore-dangle
