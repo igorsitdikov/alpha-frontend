@@ -125,9 +125,9 @@ export default {
       if (!this.checkFormValidity()) {
         return;
       }
-      this.userId = this.$store.state.userId;
-      this.parentId = this.$store.state.objectId;
-      const parentIsProject = this.$store.state.isProject;
+      this.userId = this.$store.state.login.userId;
+      this.parentId = this.$store.state.login.objectId;
+      const parentIsProject = this.$store.state.login.isProject;
 
       let query = [];
       if (this.selected === 'twitter') {

@@ -1,10 +1,9 @@
 <template>
   <v-navigation-drawer
-    v-model="$store.state.projectSidebarOpen"
+    v-model="$store.state.view.projectSidebarOpen"
     absolute
     right
   >
-    <!--      <v-list-item>-->
     <v-toolbar extended>
       <v-list-item-title>Projects</v-list-item-title>
       <template v-slot:extension>
@@ -21,17 +20,8 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </template>
-
     </v-toolbar>
-    <!--      </v-list-item>-->
-
-    <!--      <v-divider></v-divider>-->
-<!--    <template v-if="$store.state.isProject">-->
-<!--      <new-project-object></new-project-object>-->
-
-<!--    </template>-->
     <folder-tree-view></folder-tree-view>
-    <!--      <v-btn flat @click="deleteObject">Delete</v-btn>-->
 
   </v-navigation-drawer>
 </template>
@@ -51,7 +41,7 @@ export default {
   }),
   methods: {
     async deleteObject() {
-      const id = this.$store.state.objectId;
+      const id = this.$store.state.login.objectId;
       await objectsRepository.delete(id);
     },
   },

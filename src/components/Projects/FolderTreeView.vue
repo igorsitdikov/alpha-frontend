@@ -53,7 +53,7 @@ export default {
     color: 'primary',
   }),
   async mounted() {
-    this.userId = this.$store.state.userId;
+    this.userId = this.$store.state.login.userId;
     await this.redraw();
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
     },
     showEntries(node) {
       this.objectId = node.id;
-      if (this.objectId !== this.$store.state.objectId) {
+      if (this.objectId !== this.$store.state.login.objectId) {
         this.$root.$emit('showNews', this.objectId);
       }
       this.$store.commit('setObjectId', this.objectId);

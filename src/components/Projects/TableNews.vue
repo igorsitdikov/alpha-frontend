@@ -105,7 +105,7 @@ export default {
   }),
   mounted() {
     this.$nextTick(async () => {
-      this.objectId = this.$store.state.objectId;
+      this.objectId = this.$store.state.login.objectId;
       await this.getEntries(this.objectId);
     });
     this.$root.$on('showNews', async (id) => { await this.getEntries(id); });
