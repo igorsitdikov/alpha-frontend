@@ -12,8 +12,15 @@ export default new Vuex.Store({
     objectId: '',
     userId: '',
     isProject: false,
+    projectSidebarOpen: false,
+  },
+  getters: {
+    projectSidebarOpen: (state) => state.projectSidebarOpen,
   },
   mutations: {
+    toggleProjectSidebar(state) {
+      state.projectSidebarOpen = !state.projectSidebarOpen;
+    },
     setRole(state, admin) {
       Vue.set(state, 'role', admin);
     },
@@ -41,6 +48,12 @@ export default new Vuex.Store({
     async logout({ commit }) {
       commit('logout');
       await router.push('login');
+    },
+    toggleProjectSidebar({ commit }) {
+      commit('toggleProjectSidebar');
+    },
+    getProjectSidebarState({ state }) {
+      return state.projectSidebarOpen;
     },
   },
   modules: {
