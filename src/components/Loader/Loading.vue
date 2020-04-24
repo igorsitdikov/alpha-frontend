@@ -1,8 +1,17 @@
 <template>
   <div><p>Loading... Please wait</p>
-    <b-spinner small label="Small Spinner" type="grow"></b-spinner>
-    <b-spinner small label="Small Spinner" type="grow"></b-spinner>
-    <b-spinner small label="Small Spinner" type="grow"></b-spinner>
+    <v-progress-circular
+      indeterminate
+      color="green"
+    ></v-progress-circular>
+    <v-progress-circular
+      indeterminate
+      color="green"
+    ></v-progress-circular>
+    <v-progress-circular
+      indeterminate
+      color="green"
+    ></v-progress-circular>
   </div>
 </template>
 
@@ -13,5 +22,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .v-progress-circular {
+    margin: 1rem;
+  }
 </style>

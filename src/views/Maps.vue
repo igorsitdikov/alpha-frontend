@@ -3,6 +3,9 @@
     <template v-if="gisData.length > 0" >
       <Map :coordinates-gis="gisData"></Map>
     </template>
+    <template v-else>
+      <loading></loading>
+    </template>
   </div>
 </template>
 
@@ -10,12 +13,13 @@
 import { latLng } from 'leaflet';
 import Map from '../components/Maps/Map.vue';
 import RepositoryFactory from '../repositories/RepositoryFactory';
+import Loading from '../components/Loader/Loading.vue';
 
 const gisRepository = RepositoryFactory.get('gis');
 
 export default {
   name: 'Maps',
-  components: { Map },
+  components: { Loading, Map },
   data: () => ({
     gisData: [],
   }),
