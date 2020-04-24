@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <h3>News</h3>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col cols="12">
-          <table-news></table-news>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <ExpandedTableNews></ExpandedTableNews>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import TableNews from '../components/Projects/TableNews.vue';
+import ExpandedTableNews from '../components/Projects/ExpandedTableNews.vue';
 
 export default {
   name: 'News',
-  components: { TableNews },
-  data: () => ({
-  }),
+  components: { ExpandedTableNews },
+  data: () => ({}),
 };
 </script>
 

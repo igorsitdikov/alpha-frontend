@@ -1,12 +1,16 @@
 <template>
-  <div>
-    <template v-if="gisData.length > 0" >
-      <Map :coordinates-gis="gisData"></Map>
-    </template>
-    <template v-else>
-      <loading></loading>
-    </template>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <template v-if="gisData.length > 0" >
+          <Map :coordinates-gis="gisData"></Map>
+        </template>
+        <template v-else>
+          <loading></loading>
+        </template>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

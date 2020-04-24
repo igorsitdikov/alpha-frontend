@@ -1,44 +1,29 @@
 <template>
   <div>
-    <b-sidebar id="sidebar-1" title="Messages" shadow v-model="visible">
-      <div class="px-3 py-2">
-        <b-list-group>
-          <p>Messages count: {{texts.length}}</p>
-          <b-list-group-item v-for="(tweet, index) in texts" v-bind:key="index">
-            <p>{{formatDate(tweet.date)}}</p>
-            <p>{{tweet.brief}}</p>
-          </b-list-group-item>
-        </b-list-group>
+    <messages-sidebar :toggle="visible" :messages="texts"></messages-sidebar>
+
+    <l-map
+      v-if="showMap"
+      :zoom="zoom"
+      :center="center"
+      :options="mapOptions"
+      style="z-index: 0; height: 80vh;"
+      @update:center="centerUpdate"
+      @update:zoom="zoomUpdate"
+    >
+      <l-icon-default :image-path="pathToIcons"/>
+      <l-tile-layer
+        :url="url"
+        :attribution="attribution"
+      />
+      <div v-for="(mark, index) of coordinatesGis" :key="index">
+        <l-marker :lat-lng="mark.latLng"
+                  @click="innerClick(mark.entries, index)"
+                  :aria-expanded="visible ? 'true' : 'false'"
+                  aria-controls="sidebar-1">
+        </l-marker>
       </div>
-    </b-sidebar>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col cols="12">
-          <l-map
-            v-if="showMap"
-            :zoom="zoom"
-            :center="center"
-            :options="mapOptions"
-            style="z-index: 0; height: 80vh;"
-            @update:center="centerUpdate"
-            @update:zoom="zoomUpdate"
-          >
-            <l-icon-default :image-path="pathToIcons"/>
-            <l-tile-layer
-              :url="url"
-              :attribution="attribution"
-            />
-            <div v-for="(mark, index) of coordinatesGis" :key="index">
-              <l-marker :lat-lng="mark.latLng"
-                        @click="innerClick(mark.entries, index)"
-                        :aria-expanded="visible ? 'true' : 'false'"
-                        aria-controls="sidebar-1">
-              </l-marker>
-            </div>
-          </l-map>
-        </b-col>
-      </b-row>
-    </b-container>
+    </l-map>
   </div>
 </template>
 
@@ -47,10 +32,12 @@ import { latLng } from 'leaflet';
 import {
   LMap, LTileLayer, LMarker, LIconDefault,
 } from 'vue2-leaflet';
+import MessagesSidebar from '../Sidebars/MessagesSidebar.vue';
 
 export default {
   name: 'Map',
   components: {
+    MessagesSidebar,
     LMap,
     LTileLayer,
     LMarker,
@@ -84,7 +71,8 @@ export default {
   },
   methods: {
     getDateString(date) {
-      return date.toJSON().split('T')[0];
+      return date.toJSON()
+        .split('T')[0];
     },
     formatDate(dStr) {
       const today = new Date();

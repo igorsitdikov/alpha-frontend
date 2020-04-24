@@ -1,34 +1,39 @@
 <template>
-  <div class="charts">
-    <h1>This is a chart page</h1>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col cols="9">
-          <b-form-tags input-id="tags-basic"
-                       separator=" "
-                       remove-on-delete
-                       placeholder="Enter new keywords separated by space"
-                       v-model="keywords" class="mb-2"></b-form-tags>
-        </b-col>
-        <b-col cols="3">
-          <b-button @click="drawChart">
-            <b-icon icon="arrow-repeat"></b-icon>
-            Redraw chart
-          </b-button>
-        </b-col>
-      </b-row>
-      <b-row class="chart-wrapper">
-        <b-col cols="12">
-          <template v-if="dataLoaded">
-            <Chart v-bind:charts="chartData"></Chart>
-          </template>
-          <template v-if="loading">
-            <loading></loading>
-          </template>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <v-layout wrap>
+          <v-flex xs12>
+            <v-combobox multiple
+                        v-model="keywords"
+                        label="Keywords"
+                        append-icon
+                        chips
+                        deletable-chips
+                        class="tag-input"
+                        :search-input.sync="search"
+                        @keyup.tab="updateTags"
+                        @paste="updateTags">
+            </v-combobox>
+            <v-btn @click="drawChart">
+              <v-icon>mdi-reload</v-icon>
+              Redraw chart
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <template v-if="dataLoaded">
+          <Chart v-bind:charts="chartData"></Chart>
+        </template>
+        <template v-if="loading">
+          <loading></loading>
+        </template>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -41,7 +46,8 @@ const chartsRepository = RepositoryFactory.get('charts');
 export default {
   name: 'Charts',
   components: {
-    Chart, Loading,
+    Chart,
+    Loading,
   },
   data: () => ({
     dataLoaded: false,
@@ -68,10 +74,14 @@ export default {
   },
   async mounted() {
     await this.drawChart();
-    this.$root.$on('showChart', async () => { await this.drawChart(); });
+    this.$root.$on('showChart', async () => {
+      await this.drawChart();
+    });
   },
   beforeDestroy() {
-    this.$root.$off('showChart', async () => { await this.drawChart(); });
+    this.$root.$off('showChart', async () => {
+      await this.drawChart();
+    });
   },
 };
 </script>
@@ -80,6 +90,7 @@ export default {
   h1 {
     font-size: 20px;
   }
+
   .chart-wrapper {
     margin-top: 50px;
   }

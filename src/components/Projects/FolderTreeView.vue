@@ -1,30 +1,28 @@
 <template>
-  <div>
-    <v-treeview
-      v-model="active"
-      :items="nodes"
-      return-object
-      :dense="dense"
-      :selectable="selectable"
-      :activatable="activatable"
-      :hoverable="hoverable"
-      :selection-type="selectionType"
-      :color="color"
-      :shaped="shaped"
-      :rounded="rounded"
-      :active="active"
-      @update:active="onUpdate"
-    >
-      <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="!item.isLeaf">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-        </v-icon>
-        <v-icon v-else>
-          {{ 'mdi-file' }}
-        </v-icon>
-      </template>
-    </v-treeview>
-  </div>
+  <v-treeview
+    v-model="active"
+    :items="nodes"
+    return-object
+    :dense="dense"
+    :selectable="selectable"
+    :activatable="activatable"
+    :hoverable="hoverable"
+    :selection-type="selectionType"
+    :color="color"
+    :shaped="shaped"
+    :rounded="rounded"
+    :active="active"
+    @update:active="onUpdate"
+  >
+    <template v-slot:prepend="{ item, open }">
+      <v-icon v-if="!item.isLeaf">
+        {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+      </v-icon>
+      <v-icon v-else>
+        {{ 'mdi-file' }}
+      </v-icon>
+    </template>
+  </v-treeview>
 </template>
 
 <script>
@@ -60,7 +58,9 @@ export default {
     });
   },
   beforeDestroy() {
-    this.$root.$off('showTree', async () => { await this.redraw(); });
+    this.$root.$off('showTree', async () => {
+      await this.redraw();
+    });
   },
   methods: {
     onUpdate(item) {
@@ -87,13 +87,17 @@ export default {
       if (node.isLeaf && this.objectId !== this.$store.state.login.objectId) {
         this.$store.commit('setObjectId', this.objectId);
         switch (this.$route.name) {
-          case 'News': this.$root.$emit('showNews', this.objectId);
+          case 'News':
+            this.$root.$emit('showNews', this.objectId);
             break;
-          case 'Charts': this.$root.$emit('showChart');
+          case 'Charts':
+            this.$root.$emit('showChart');
             break;
-          case 'Maps': this.$root.$emit('showMap');
+          case 'Maps':
+            this.$root.$emit('showMap');
             break;
-          default: break;
+          default:
+            break;
         }
       }
     },
