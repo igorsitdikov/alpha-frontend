@@ -8,14 +8,14 @@
       <v-list-item-title>Projects</v-list-item-title>
       <template v-slot:extension>
         <v-btn
-          color="pink"
+          color="primary"
           dark
           small
           absolute
           center
           left
           fab
-          @click="dialog = !dialog"
+          @click="changeDialogState"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -40,6 +40,9 @@ export default {
     dialog: false,
   }),
   methods: {
+    changeDialogState() {
+      this.$store.dispatch('toggleProjectDialog');
+    },
     async deleteObject() {
       const id = this.$store.state.login.objectId;
       await objectsRepository.delete(id);
