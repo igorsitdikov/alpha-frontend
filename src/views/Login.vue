@@ -91,9 +91,9 @@ export default {
             await this.$router.push(this.$route.params.nextUrl);
           } else if (isAdmin === 'admin') {
             this.$store.commit('setRole', true);
-            await this.$router.push('admin');
+            await this.$router.go({ path: '/', force: true });
           } else {
-            await this.$router.push('about');
+            await this.$router.go({ path: '/', force: true });
           }
         }
         this.$root.$emit('showTree');

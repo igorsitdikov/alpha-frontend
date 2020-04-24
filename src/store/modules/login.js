@@ -1,6 +1,15 @@
 import Vue from 'vue';
 import router from '../../router';
 
+export const initialStateGlobalSettings = () => ({
+  role: false,
+  authorized: false,
+  objectId: '',
+  object: null,
+  userId: '',
+  isProject: false,
+});
+
 const data = {
   role: false,
   authorized: false,
@@ -31,6 +40,10 @@ const mutations = {
   setAuthorized(state, authorized) {
     Vue.set(state, 'authorized', authorized);
   },
+  resetStateGlobalSettings(state) {
+    const initial = initialStateGlobalSettings();
+    Object.keys(initial).forEach((key) => { state[key] = initial[key]; });
+  },
   logout(state) {
     Vue.set(state, 'role', false);
     Vue.set(state, 'authorized', false);
@@ -43,6 +56,7 @@ const mutations = {
 const actions = {
   async logout({ commit }) {
     commit('logout');
+    commit('resetStateGlobalSettings');
     await router.push('login');
   },
 };

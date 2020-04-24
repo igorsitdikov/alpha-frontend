@@ -41,12 +41,10 @@
 </template>
 
 <script>
-// import FolderTreeView from '../Projects/FolderTreeView.vue';
 
 export default {
   name: 'NavSidebar',
   components: {
-    // FolderTreeView,
   },
   computed: {
     filteredRoutes() {
