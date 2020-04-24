@@ -96,6 +96,7 @@ export default {
             await this.$router.push('about');
           }
         }
+        this.$root.$emit('showTree');
       }
     },
   },

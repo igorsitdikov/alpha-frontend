@@ -5,6 +5,7 @@ const data = {
   role: false,
   authorized: false,
   objectId: '',
+  object: null,
   userId: '',
   isProject: false,
 };
@@ -20,6 +21,9 @@ const mutations = {
   },
   setObjectId(state, id) {
     Vue.set(state, 'objectId', id);
+  },
+  setObject(state, object) {
+    Vue.set(state, 'object', object);
   },
   setUserId(state, id) {
     Vue.set(state, 'userId', id);

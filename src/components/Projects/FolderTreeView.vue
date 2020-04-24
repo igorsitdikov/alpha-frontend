@@ -54,7 +54,13 @@ export default {
   }),
   async mounted() {
     this.userId = this.$store.state.login.userId;
-    await this.redraw();
+    this.$nextTick(async () => this.redraw());
+    this.$root.$on('showTree', async () => {
+      await this.redraw();
+    });
+  },
+  beforeDestroy() {
+    this.$root.$off('showTree', async () => { await this.redraw(); });
   },
   methods: {
     onUpdate(item) {
@@ -76,11 +82,20 @@ export default {
     },
     showEntries(node) {
       this.objectId = node.id;
-      if (this.objectId !== this.$store.state.login.objectId) {
-        this.$root.$emit('showNews', this.objectId);
-      }
-      this.$store.commit('setObjectId', this.objectId);
+      this.$store.commit('setObject', node);
       this.$store.commit('setIsProject', !node.isLeaf);
+      if (node.isLeaf && this.objectId !== this.$store.state.login.objectId) {
+        this.$store.commit('setObjectId', this.objectId);
+        switch (this.$route.name) {
+          case 'News': this.$root.$emit('showNews', this.objectId);
+            break;
+          case 'Charts': this.$root.$emit('showChart');
+            break;
+          case 'Maps': this.$root.$emit('showMap');
+            break;
+          default: break;
+        }
+      }
     },
     clean() {
       this.entries = [];

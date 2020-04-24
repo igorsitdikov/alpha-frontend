@@ -55,14 +55,23 @@ export default {
       this.dataLoaded = false;
       this.loading = true;
       this.objectId = this.$store.state.login.objectId;
-      const { data } = await chartsRepository.show(this.objectId, this.keywords);
-      this.chartData = data;
-      this.loading = false;
-      this.dataLoaded = true;
+      try {
+        const { data } = await chartsRepository.show(this.objectId, this.keywords);
+        this.chartData = data;
+        this.dataLoaded = true;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.loading = false;
+      }
     },
   },
   async mounted() {
     await this.drawChart();
+    this.$root.$on('showChart', async () => { await this.drawChart(); });
+  },
+  beforeDestroy() {
+    this.$root.$off('showChart', async () => { await this.drawChart(); });
   },
 };
 </script>

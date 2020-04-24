@@ -36,6 +36,10 @@ export default {
   },
   async mounted() {
     await this.drawMarkers();
+    this.$root.$on('showMap', async () => { await this.drawMarkers(); });
+  },
+  beforeDestroy() {
+    this.$root.$off('showMap', async () => { await this.drawMarkers(); });
   },
 };
 </script>
