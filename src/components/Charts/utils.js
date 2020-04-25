@@ -22,4 +22,25 @@ module.exports = {
       ]
     })`
   ),
+  computedSource: (source) => {
+    switch (source) {
+      case 'twitter':
+        return {
+          icon: 'mdi-twitter',
+          title: 'Twitter',
+          color: '#26c6da',
+        };
+      case 'rss':
+        return {
+          icon: 'mdi-rss',
+          title: 'RSS',
+          color: '#da6826',
+        };
+      default:
+        return {
+          icon: '',
+          title: '',
+        };
+    }
+  },
 };

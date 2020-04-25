@@ -18,12 +18,14 @@
       </v-toolbar>
     </template>
     <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length">{{ item.brief }}</td>
+      <td :bgcolor="`${computedSource(item.source).color}`"
+          :colspan="headers.length">{{ item.brief }}</td>
     </template>
   </v-data-table>
 </template>
 
 <script>
+import utils from '../Charts/utils';
 import RepositoryFactory from '../../repositories/RepositoryFactory';
 
 const objectsRepository = RepositoryFactory.get('objects');
@@ -52,6 +54,7 @@ export default {
     this.$root.$off('showNews', async (id) => { await this.getEntries(id); });
   },
   methods: {
+    computedSource: (source) => utils.computedSource(source),
     async getEntries(id) {
       this.loading = true;
       console.log(`selected ${id}`);

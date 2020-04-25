@@ -3,6 +3,7 @@
     v-model="toggle"
     absolute
     width="300"
+    style="z-index: 3"
     left
   >
     <v-toolbar color="default"
@@ -49,31 +50,13 @@
 </template>
 
 <script>
+import utils from '../Charts/utils';
+
 export default {
   name: 'MessagesSidebar',
   props: ['toggle', 'messages'],
   methods: {
-    computedSource(source) {
-      switch (source) {
-        case 'twitter':
-          return {
-            icon: 'mdi-twitter',
-            title: 'Twitter',
-            color: '#26c6da',
-          };
-        case 'rss':
-          return {
-            icon: 'mdi-rss',
-            title: 'RSS',
-            color: '#da6826',
-          };
-        default:
-          return {
-            icon: '',
-            title: '',
-          };
-      }
-    },
+    computedSource: (source) => utils.computedSource(source),
     getDateString(date) {
       return date.toJSON()
         .split('T')[0];
