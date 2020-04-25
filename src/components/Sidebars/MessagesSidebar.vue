@@ -2,26 +2,49 @@
   <v-navigation-drawer
     v-model="toggle"
     absolute
+    width="300"
     left
   >
     <v-toolbar color="default"
                dark
                flat>
       <v-list-item-title>Messages count: {{messages.length}}</v-list-item-title>
+      <v-btn
+        icon
+        @click.stop="toggle = !toggle"
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
     </v-toolbar>
-    <v-card
-      class="mx-auto"
-      max-width="500"
-      tile
+    <v-col
+      v-for="(item, i) in messages"
+      :key="i"
+      cols="12"
     >
-      <!--      <p>Messages count: {{messages.length}}</p>-->
-      <v-list-item v-for="(tweet, index) in messages" v-bind:key="index">
-        <v-list-item-content>
-          <p>{{formatDate(tweet.date)}}</p>
-          <p>{{tweet.brief}}</p>
-        </v-list-item-content>
-      </v-list-item>
-    </v-card>
+      <v-card
+        class="mx-auto"
+        :color="`${computedSource(item.source).color}`"
+        dark
+        max-width="400"
+      >
+        <div class="d-flex flex-no-wrap justify-space-between">
+          <div>
+            <v-card-title>
+              <v-icon
+                medium
+                left
+              >
+                {{computedSource(item.source).icon}}
+              </v-icon>
+              <span class="title font-weight-light">
+                {{computedSource(item.source).title}} {{formatDate(item.date)}}
+              </span>
+            </v-card-title>
+            <v-card-subtitle class="subtitle-1" v-text='`"${item.brief}"`'></v-card-subtitle>
+          </div>
+        </div>
+      </v-card>
+    </v-col>
   </v-navigation-drawer>
 </template>
 
@@ -30,6 +53,27 @@ export default {
   name: 'MessagesSidebar',
   props: ['toggle', 'messages'],
   methods: {
+    computedSource(source) {
+      switch (source) {
+        case 'twitter':
+          return {
+            icon: 'mdi-twitter',
+            title: 'Twitter',
+            color: '#26c6da',
+          };
+        case 'rss':
+          return {
+            icon: 'mdi-rss',
+            title: 'RSS',
+            color: '#da6826',
+          };
+        default:
+          return {
+            icon: '',
+            title: '',
+          };
+      }
+    },
     getDateString(date) {
       return date.toJSON()
         .split('T')[0];
