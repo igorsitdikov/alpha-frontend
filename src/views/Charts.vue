@@ -2,12 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-layout wrap>
-          <v-flex xs12>
+        <v-card>
+          <v-card-title>Search by keywords</v-card-title>
+          <v-card-text>
             <v-combobox multiple
                         v-model="keywords"
                         label="Keywords"
-                        append-icon
+                        placeholder="Enter new keyword and press Tab or Enter"
                         chips
                         deletable-chips
                         class="tag-input"
@@ -15,30 +16,35 @@
                         @keyup.tab="updateTags"
                         @paste="updateTags">
             </v-combobox>
-            <v-btn @click="drawChart">
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12">
+        <v-card
+          :loading="loading"
+          :raised=true
+          :max-height="750"
+        >
+          <v-card-title>Chart</v-card-title>
+          <v-card-actions>
+            <v-btn
+              color="warning"
+              @click="drawChart">
               <v-icon>mdi-reload</v-icon>
               Redraw chart
             </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <template v-if="dataLoaded">
-          <Chart v-bind:charts="chartData"></Chart>
-        </template>
-        <template v-if="loading">
-          <loading></loading>
-        </template>
+          </v-card-actions>
+          <template >
+            <Chart v-if="dataLoaded" v-bind:charts="chartData"></Chart>
+          </template>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import Chart from '../components/Charts/Chart.vue';
-import Loading from '../components/Loader/Loading.vue';
+import Chart from '@/components/Charts/Chart.vue';
 import RepositoryFactory from '../repositories/RepositoryFactory';
 
 const chartsRepository = RepositoryFactory.get('charts');
@@ -47,14 +53,18 @@ export default {
   name: 'Charts',
   components: {
     Chart,
-    Loading,
   },
   data: () => ({
     dataLoaded: false,
-    chartData: null,
+    chartData: {
+      labels: [],
+      datasets: [],
+    },
     objectId: '',
-    keywords: ['covid-19', 'coronavirus', 'usa', 'china'],
+    // keywords: ['covid-19', 'coronavirus', 'usa', 'china'],
+    keywords: [],
     loading: false,
+    search: '',
   }),
   methods: {
     async drawChart() {
@@ -70,6 +80,14 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    updateTags() {
+      this.$nextTick(() => {
+        this.select.push(...this.search.split(','));
+        this.$nextTick(() => {
+          this.search = '';
+        });
+      });
     },
   },
   async mounted() {
@@ -90,7 +108,6 @@ export default {
   h1 {
     font-size: 20px;
   }
-
   .chart-wrapper {
     margin-top: 50px;
   }

@@ -5,7 +5,9 @@
               :chart-data="bigLineChart.chartData"
               :gradient-colors="bigLineChart.gradientColors"
               :gradient-stops="bigLineChart.gradientStops"
-              :extra-options="bigLineChart.extraOptions">
+              :extra-options="bigLineChart.extraOptions"
+              :height="550"
+  >
   </line-chart>
 </template>
 
@@ -43,6 +45,7 @@ export default {
       borderDashOffset: 0.0,
       pointBorderColor: 'rgba(255,255,255,0)',
       pointBorderWidth: 20,
+      height: 550,
       pointHoverRadius: 4,
       pointHoverBorderWidth: 15,
       pointRadius: 4,

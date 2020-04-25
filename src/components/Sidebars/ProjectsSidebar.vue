@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    style="z-index: 2"
     v-model="$store.state.view.projectSidebarOpen"
     absolute
     right

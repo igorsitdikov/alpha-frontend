@@ -4,6 +4,7 @@
     v-model="drawer"
     :mini-variant.sync="mini"
     :expand-on-hover=true
+    style="z-index: 2"
     absolute
     permanent
   >
