@@ -2,12 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <template v-if="gisData.length > 0" >
-          <Map :coordinates-gis="gisData"></Map>
-        </template>
-        <template v-else>
-          <loading></loading>
-        </template>
+        <Map :loading="!(gisData.length > 0)" :coordinates-gis="gisData"></Map>
       </v-col>
     </v-row>
   </v-container>
@@ -17,13 +12,14 @@
 import { latLng } from 'leaflet';
 import Map from '../components/Maps/Map.vue';
 import RepositoryFactory from '../repositories/RepositoryFactory';
-import Loading from '../components/Loader/Loading.vue';
 
 const gisRepository = RepositoryFactory.get('gis');
 
 export default {
   name: 'Maps',
-  components: { Loading, Map },
+  components: {
+    Map,
+  },
   data: () => ({
     gisData: [],
   }),
@@ -44,10 +40,14 @@ export default {
   },
   async mounted() {
     await this.drawMarkers();
-    this.$root.$on('showMap', async () => { await this.drawMarkers(); });
+    this.$root.$on('showMap', async () => {
+      await this.drawMarkers();
+    });
   },
   beforeDestroy() {
-    this.$root.$off('showMap', async () => { await this.drawMarkers(); });
+    this.$root.$off('showMap', async () => {
+      await this.drawMarkers();
+    });
   },
 };
 </script>

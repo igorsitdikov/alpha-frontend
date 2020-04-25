@@ -1,29 +1,35 @@
 <template>
   <div>
     <messages-sidebar :toggle="visible" :messages="texts"></messages-sidebar>
-
-    <l-map
-      v-if="showMap"
-      :zoom="zoom"
-      :center="center"
-      :options="mapOptions"
-      style="z-index: 0; height: 80vh;"
-      @update:center="centerUpdate"
-      @update:zoom="zoomUpdate"
-    >
-      <l-icon-default :image-path="pathToIcons"/>
-      <l-tile-layer
-        :url="url"
-        :attribution="attribution"
-      />
-      <div v-for="(mark, index) of coordinatesGis" :key="index">
-        <l-marker :lat-lng="mark.latLng"
-                  @click="innerClick(mark.entries, index)"
-                  :aria-expanded="visible ? 'true' : 'false'"
-                  aria-controls="sidebar-1">
-        </l-marker>
-      </div>
-    </l-map>
+    <v-card
+      class="mx-auto"
+      :raised=true
+      :loading="loading"
+      light>
+      <v-card-title>Map</v-card-title>
+      <l-map
+        v-if="showMap"
+        :zoom="zoom"
+        :center="center"
+        :options="mapOptions"
+        style="z-index: 0; height: 80vh;"
+        @update:center="centerUpdate"
+        @update:zoom="zoomUpdate"
+      >
+        <l-icon-default :image-path="pathToIcons"/>
+        <l-tile-layer
+          :url="url"
+          :attribution="attribution"
+        />
+        <div v-for="(mark, index) of coordinatesGis" :key="index">
+          <l-marker :lat-lng="mark.latLng"
+                    @click="innerClick(mark.entries, index)"
+                    :aria-expanded="visible ? 'true' : 'false'"
+                    aria-controls="sidebar-1">
+          </l-marker>
+        </div>
+      </l-map>
+    </v-card>
   </div>
 </template>
 
@@ -61,13 +67,14 @@ export default {
       pathToIcons: '/images/',
       showMap: true,
       texts: '',
-      loading: false,
+      // loading: false,
       currentMarker: 0,
       visible: false,
     };
   },
   props: {
     coordinatesGis: Array,
+    loading: Boolean,
   },
   methods: {
     getDateString(date) {
