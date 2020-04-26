@@ -1,27 +1,62 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    :loading="loading"
-    loading-text="Loading... Please wait"
-    :single-expand="singleExpand"
-    :expanded.sync="expanded"
-    item-key="name"
-    show-expand
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>News</v-toolbar-title>
-        <v-spacer></v-spacer>
-<!--        <v-switch v-model="singleExpand" label="Single expand" class="mt-2"></v-switch>-->
-      </v-toolbar>
-    </template>
-    <template v-slot:expanded-item="{ headers, item }">
-      <td :bgcolor="`${computedSource(item.source).color}`"
-          :colspan="headers.length">{{ item.brief }}</td>
-    </template>
-  </v-data-table>
+  <v-row>
+    <v-col cols="12">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :loading="loading"
+      loading-text="Loading... Please wait"
+      :single-expand="singleExpand"
+      :expanded.sync="expanded"
+      :items-per-page="itemsPerPage"
+      :page.sync="page"
+      item-key="name"
+      show-expand
+      class="elevation-1"
+      @page-count="pageCount = $event"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>News</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.urls="{ item }">
+        <div v-for="(url, index) in item.urls" :key="index">
+          <a :href="url" dark>{{ url }}</a>
+        </div>
+      </template>
+      <template v-slot:expanded-item="{ headers, item }">
+        <td :bgcolor="`${computedSource(item.source).color}`"
+            :colspan="headers.length">{{ item.brief }}
+        </td>
+      </template>
+    </v-data-table>
+<!--    <div class="text-center pt-2">-->
+<!--      <v-pagination v-model="page" :length="pageCount"></v-pagination>-->
+<!--      <v-menu open-on-hover top offset-y>-->
+<!--        <template v-slot:activator="{ on }">-->
+<!--          <v-btn-->
+<!--            color="primary"-->
+<!--            dark-->
+<!--            v-on="on"-->
+<!--          >-->
+<!--            Dropdown-->
+<!--          </v-btn>-->
+<!--        </template>-->
+<!--        <v-list>-->
+<!--          <v-list-item-->
+<!--            v-for="(item, index) in elements"-->
+<!--            :key="index"-->
+<!--            @click="itemsPerPage = item.num"-->
+<!--          >-->
+<!--            <v-list-item-title>{{ item.num }}</v-list-item-title>-->
+<!--          </v-list-item>-->
+<!--        </v-list>-->
+<!--      </v-menu>-->
+<!--    </div>-->
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -35,23 +70,48 @@ export default {
     expanded: [],
     singleExpand: true,
     headers: [
-      { text: 'Date', value: 'date' },
-      { text: 'Source', value: 'source' },
-      { text: 'Language', value: 'language' },
-      { text: 'Urls', value: 'urls' },
+      {
+        text: 'Date',
+        value: 'date',
+      },
+      {
+        text: 'Source',
+        value: 'source',
+      },
+      {
+        text: 'Language',
+        value: 'language',
+      },
+      {
+        text: 'Urls',
+        value: 'urls',
+      },
     ],
     items: [],
     loading: false,
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
+    elements: [
+      { num: 3 },
+      { num: 5 },
+      { num: 7 },
+      { num: 10 },
+    ],
   }),
   mounted() {
     this.$nextTick(async () => {
       this.objectId = this.$store.state.login.objectId;
       await this.getEntries(this.objectId);
     });
-    this.$root.$on('showNews', async (id) => { await this.getEntries(id); });
+    this.$root.$on('showNews', async (id) => {
+      await this.getEntries(id);
+    });
   },
   beforeDestroy() {
-    this.$root.$off('showNews', async (id) => { await this.getEntries(id); });
+    this.$root.$off('showNews', async (id) => {
+      await this.getEntries(id);
+    });
   },
   methods: {
     computedSource: (source) => utils.computedSource(source),

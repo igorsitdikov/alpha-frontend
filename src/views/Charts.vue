@@ -11,10 +11,7 @@
                         placeholder="Enter new keyword and press Tab or Enter"
                         chips
                         deletable-chips
-                        class="tag-input"
-                        :search-input.sync="search"
-                        @keyup.tab="updateTags"
-                        @paste="updateTags">
+                        class="tag-input">
             </v-combobox>
           </v-card-text>
         </v-card>
@@ -80,14 +77,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    updateTags() {
-      this.$nextTick(() => {
-        this.select.push(...this.search.split(','));
-        this.$nextTick(() => {
-          this.search = '';
-        });
-      });
     },
   },
   async mounted() {

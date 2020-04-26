@@ -43,7 +43,7 @@
       <v-card>
         <v-card-title class="headline">Remove object ?
         </v-card-title>
-        <v-card-text>Name : {{$store.state.login.object.name}}</v-card-text>
+        <v-card-text>Name : {{objectName}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="dialog = false">Disagree</v-btn>
@@ -67,6 +67,11 @@ export default {
   data: () => ({
     dialog: false,
   }),
+  computed: {
+    objectName() {
+      return this.$store.state.login.object === null ? 'undefined' : this.$store.state.login.object.name;
+    },
+  },
   methods: {
     changeDialogState() {
       this.$store.dispatch('toggleProjectDialog');
