@@ -1,30 +1,57 @@
 <template>
-  <v-navigation-drawer
-    style="z-index: 2"
-    v-model="$store.state.view.projectSidebarOpen"
-    absolute
-    right
-  >
-    <v-toolbar extended>
-      <v-list-item-title>Projects</v-list-item-title>
-      <template v-slot:extension>
-        <v-btn
-          color="primary"
-          dark
-          small
-          absolute
-          center
-          left
-          fab
-          @click="changeDialogState"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-    </v-toolbar>
-    <folder-tree-view></folder-tree-view>
+  <div>
+    <v-navigation-drawer
+      style="z-index: 2"
+      v-model="$store.state.view.projectSidebarOpen"
+      absolute
+      right
+    >
+      <v-toolbar extended>
+        <v-list-item-title>Projects</v-list-item-title>
+        <template v-slot:extension>
+          <v-btn
+            color="primary"
+            dark
+            small
+            absolute
+            center
+            left
+            fab
+            @click="changeDialogState"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+          <v-btn
+            color="error"
+            dark
+            small
+            absolute
+            center
+            right
+            fab
+            @click="dialog = true"
+          >
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </template>
 
-  </v-navigation-drawer>
+      </v-toolbar>
+      <folder-tree-view></folder-tree-view>
+
+    </v-navigation-drawer>
+    <v-dialog v-model="dialog" persistent max-width="290">
+      <v-card>
+        <v-card-title class="headline">Remove object ?
+        </v-card-title>
+        <v-card-text>Name : {{$store.state.login.object.name}}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false">Disagree</v-btn>
+          <v-btn color="green darken-1" text @click="deleteObject">Agree</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -45,8 +72,11 @@ export default {
       this.$store.dispatch('toggleProjectDialog');
     },
     async deleteObject() {
-      const id = this.$store.state.login.objectId;
+      // eslint-disable-next-line no-underscore-dangle
+      const id = this.$store.state.login.object._id;
       await objectsRepository.delete(id);
+      this.$root.$emit('showTree');
+      this.dialog = false;
     },
   },
 };

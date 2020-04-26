@@ -150,7 +150,7 @@ export default {
             query = [
               {
                 source: this.source,
-                query: this.queries.map((el) => el.value)
+                query: this.queries.map((el) => `"${el.value}"`)
                   .join(' OR '),
               },
             ];
