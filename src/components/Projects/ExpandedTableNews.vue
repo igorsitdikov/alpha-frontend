@@ -1,8 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <v-data-table
-        :headers="headers"
+    <v-col cols="6">
+      <v-data-iterator
         :items="items"
         :loading="loading"
         loading-text="Loading... Please wait"
@@ -15,54 +14,53 @@
         class="elevation-1"
         @page-count="pageCount = $event"
       >
-        <template v-slot:top>
-          <v-toolbar flat>
-            <v-toolbar-title>News</v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.urls="{ item }">
-          <div v-for="(url, index) in item.urls" :key="index">
-            <a :href="url" target="_blank">{{ url }}</a>
-          </div>
-        </template>
-        <template v-slot:expanded-item="{ headers, item }">
-          <td :bgcolor="`${computedSource(item.source).color}`"
-              :colspan="headers.length">{{ item.brief }}
-          </td>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon
-            small
-            @click="deleteItem(item.id)"
+        <template v-slot:default="props">
+          <v-col
+            v-for="item in props.items"
+            :key="item.name"
+            cols="12"
+            sm="12"
+            md="12"
+            lg="12"
           >
-            mdi-delete
-          </v-icon>
+            <v-row class="flex-grow-1 flex-shrink-1 "
+                   v-for="(key, index) in filteredKeys"
+                   :key="index"
+            >
+              <template v-if="key === 'Urls'">
+                <v-col cols="1" class="justify-start text-left pt-0"
+                       :class="{ 'blue--text': sortBy === key }">
+                  {{ key }}:
+                </v-col>
+                <v-col cols="11" class="justify-start text-left pt-0"
+                       :class="{ 'blue--text': sortBy === key }">
+                  <div v-for="(url, index) in item.urls" :key="index">
+                    <a :href="url" target="_blank">{{ url }}</a>
+                  </div>
+                </v-col>
+              </template>
+              <template v-else>
+                <v-col cols="1" class="justify-start text-left pt-0"
+                       :class="{ 'blue--text': sortBy === key }">
+                  {{ key }}:
+                </v-col>
+                <v-col cols="11" class="justify-start text-left pt-0"
+                       :class="{ 'blue--text': sortBy === key }">
+                  {{ item[key.toLowerCase()] }}
+                </v-col>
+              </template>
+            </v-row>
+            <v-row>
+              <v-col cols="2" offset="10">
+                <v-btn icon @click="deleteItem(item.id)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+          </v-col>
         </template>
-      </v-data-table>
-      <!--    <div class="text-center pt-2">-->
-      <!--      <v-pagination v-model="page" :length="pageCount"></v-pagination>-->
-      <!--      <v-menu open-on-hover top offset-y>-->
-      <!--        <template v-slot:activator="{ on }">-->
-      <!--          <v-btn-->
-      <!--            color="primary"-->
-      <!--            dark-->
-      <!--            v-on="on"-->
-      <!--          >-->
-      <!--            Dropdown-->
-      <!--          </v-btn>-->
-      <!--        </template>-->
-      <!--        <v-list>-->
-      <!--          <v-list-item-->
-      <!--            v-for="(item, index) in elements"-->
-      <!--            :key="index"-->
-      <!--            @click="itemsPerPage = item.num"-->
-      <!--          >-->
-      <!--            <v-list-item-title>{{ item.num }}</v-list-item-title>-->
-      <!--          </v-list-item>-->
-      <!--        </v-list>-->
-      <!--      </v-menu>-->
-      <!--    </div>-->
+      </v-data-iterator>
     </v-col>
   </v-row>
 </template>
@@ -76,6 +74,7 @@ const entriesRepository = RepositoryFactory.get('entries');
 export default {
   name: 'ExpandedTableNews',
   data: () => ({
+    sortBy: 'date',
     expanded: [],
     singleExpand: true,
     headers: [
@@ -102,6 +101,13 @@ export default {
       },
     ],
     items: [],
+    keys: [
+      'Date',
+      'Brief',
+      // 'Language',
+      // 'Source',
+      'Urls',
+    ],
     loading: false,
     page: 1,
     pageCount: 0,
@@ -126,6 +132,14 @@ export default {
     this.$root.$off('showNews', async (id) => {
       await this.getEntries(id);
     });
+  },
+  computed: {
+    numberOfPages() {
+      return Math.ceil(this.items.length / this.itemsPerPage);
+    },
+    filteredKeys() {
+      return this.keys.filter((key) => key !== 'Name');
+    },
   },
   methods: {
     computedSource: (source) => utils.computedSource(source),
