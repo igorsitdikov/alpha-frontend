@@ -67,7 +67,7 @@ export default {
     async drawChart() {
       this.dataLoaded = false;
       this.loading = true;
-      this.objectId = this.$store.state.login.objectId;
+      this.objectId = this.$store.getters.objectId;
       try {
         const { data } = await chartsRepository.show(this.objectId, this.keywords);
         this.chartData = data;

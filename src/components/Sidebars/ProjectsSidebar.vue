@@ -2,7 +2,7 @@
   <div>
     <v-navigation-drawer
       style="z-index: 2"
-      v-model="$store.state.view.projectSidebarOpen"
+      v-model="$store.getters.projectSidebarOpen"
       absolute
       right
     >
@@ -69,7 +69,7 @@ export default {
   }),
   computed: {
     objectName() {
-      return this.$store.state.login.object === null ? 'undefined' : this.$store.state.login.object.name;
+      return this.$store.getters.object === null ? 'undefined' : this.$store.getters.object.name;
     },
   },
   methods: {
@@ -78,7 +78,7 @@ export default {
     },
     async deleteObject() {
       // eslint-disable-next-line no-underscore-dangle
-      const id = this.$store.state.login.object._id;
+      const id = this.$store.getters.objectId;
       await objectsRepository.delete(id);
       this.$root.$emit('showTree');
       this.dialog = false;

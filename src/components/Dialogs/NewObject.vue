@@ -1,29 +1,21 @@
 <template>
-  <v-dialog v-model="$store.state.dialog.dialogProjectOpen" persistent max-width="600px">
+  <v-dialog v-model="$store.getters.dialogObjectOpen" persistent max-width="600px">
     <v-card>
       <v-card-title>
-        <span class="headline">Create new project or object</span>
+        <span class="headline">Create new object</span>
       </v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12">
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-col cols="12">
-                <v-checkbox
-                  v-model="toRoot"
-                  :label="computedParent"
-                ></v-checkbox>
-              </v-col>
-              <v-col cols="12">
-                <v-switch v-model="isProject" label="Project" class="mx-2"></v-switch>
-                <v-text-field
-                  :rules="projectRules"
-                  v-model="name"
-                  label="Project or object name*"
-                  required></v-text-field>
-              </v-col>
-              <template v-if="!isProject">
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-col cols="12">
+                  <v-text-field
+                    :rules="projectRules"
+                    v-model="name"
+                    label="Object name*"
+                    required></v-text-field>
+                </v-col>
                 <v-col cols="12" v-for="(item, index) in computedObj" :key="index">
                   <v-text-field label="Query*"
                                 required
@@ -50,8 +42,7 @@
                     ></v-radio>
                   </v-radio-group>
                 </v-col>
-              </template>
-            </v-form>
+              </v-form>
             </v-col>
           </v-row>
         </v-container>
@@ -73,12 +64,8 @@ const objectsRepository = RepositoryFactory.get('objects');
 export default {
   name: 'NewProject',
   data: () => ({
-    isProject: true,
+    isProject: false,
     valid: true,
-    toRoot: false,
-    projectRules: [
-      (v) => !!v || 'Name is required',
-    ],
     queries: [{}],
     options: [
       {
@@ -118,31 +105,15 @@ export default {
       // return this.selected === 'twitter' ? this.queries.slice(0, this.limit) : this.queries;
       return this.queries.slice(0, this.limit);
     },
-    computedParent() {
-      const { parent, name } = this.$store.state.login.object;
-      const isObject = this.$store.state.login.object.isLeaf;
-      if (isObject && parent !== null) {
-        return `Add to root, else to project ${parent.name}`;
-      } if (!isObject) {
-        return `Add to root, else to project ${name}`;
-      }
-      return 'Add to root';
-    },
   },
   methods: {
     closeModal() {
-      this.$store.commit('setDialogProject', false);
+      this.$store.commit('setDialogObject', false);
     },
     async create() {
       if (this.$refs.form.validate()) {
-        this.userId = this.$store.state.login.userId;
-        const parentIsProject = this.$store.state.login.isProject;
-        this.parentId = null;
-        if (!this.toRoot) {
-          this.parentId = parentIsProject ? this.$store.state.login.object.id
-            : this.$store.state.login.object.parent_id;
-        }
-
+        this.userId = this.$store.getters.userId;
+        this.parentId = this.$store.getters.objectId;
 
         let query = [];
         if (!this.isProject) {
@@ -170,7 +141,7 @@ export default {
           console.log('created');
           this.$root.$emit('showTree');
         }
-        this.$store.commit('setDialogProject', false);
+        this.$store.commit('setDialogObject', false);
       }
     },
     addFieldForQuery() {
@@ -183,8 +154,8 @@ export default {
       if (index !== 0) {
         this.queries.splice(index, 1);
       } else if (this.queries[0].value !== undefined
-        && index === 0
-        && this.queries.length > 1) {
+          && index === 0
+          && this.queries.length > 1) {
         this.queries.splice(index, 1);
       } else if (index === 0) {
         this.queries[0].value = undefined;

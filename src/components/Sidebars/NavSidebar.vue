@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-if="$store.state.login.authorized"
+    v-if="$store.getters.authorized"
     v-model="drawer"
     :mini-variant.sync="mini"
     :expand-on-hover=true
@@ -50,10 +50,10 @@ export default {
   computed: {
     filteredRoutes() {
       return this.routes.filter((el) => {
-        if (el.admin && !this.$store.state.login.role) {
+        if (el.admin && !this.$store.getters.role) {
           return false;
         }
-        return !(!el.admin && !this.$store.state.login.authorized);
+        return !(!el.admin && !this.$store.getters.authorized);
       });
     },
   },

@@ -31,13 +31,16 @@
     >
       <template slot="append" slot-scope="{ item }">
         <template v-if="!item.isLeaf">
-          <v-btn icon small color="red" @click="addChild(item);">
+          <v-btn icon small color="red" @click="addChildProject(item);">
             <v-icon>mdi-folder-plus</v-icon>
           </v-btn>
-          <v-btn icon small color="green" @click="addChild(item);">
+          <v-btn icon small color="green" @click="addChildObject(item);">
             <v-icon>mdi-file-plus</v-icon>
           </v-btn>
         </template>
+        <v-btn icon small color="black" @click="deleteObject(item);">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
       </template>
       <template v-slot:prepend="{ item, open }">
         <v-icon v-if="!item.isLeaf">
@@ -48,10 +51,10 @@
         </v-icon>
       </template>
     </v-treeview>
-    <v-btn icon x-large color="red" @click="addChild(null);">
+    <v-btn icon x-large color="red" @click="addChildProject(null);">
       <v-icon>mdi-folder-plus</v-icon>
     </v-btn>
-    <v-btn icon x-large color="green" @click="addChild(null);">
+    <v-btn icon x-large color="green" @click="addChildObject(null);">
       <v-icon>mdi-file-plus</v-icon>
     </v-btn>
   </div>
@@ -85,7 +88,7 @@ export default {
     color: 'primary',
   }),
   async mounted() {
-    this.userId = this.$store.state.login.userId;
+    this.userId = this.$store.getters.userId;
     this.$nextTick(async () => this.redraw());
     this.$root.$on('showTree', async () => {
       await this.redraw();
@@ -97,18 +100,20 @@ export default {
     });
   },
   methods: {
-    addChild(item) {
-      console.log(item);
-      // if (!item.children) {
-      //   this.$set(item, "children", []);
-      // }
-      //
-      // const name = `${item.name} (${item.children.length})`;
-      // const id = this.nextId++;
-      // item.children.push({
-      //   id,
-      //   name
-      // });
+    addChildObject(item) {
+      this.setObjectIdToStore(item);
+      this.$store.dispatch('toggleObjectDialog');
+    },
+    addChildProject(item) {
+      this.setObjectIdToStore(item);
+      this.$store.dispatch('toggleProjectDialog');
+    },
+    setObjectIdToStore(item) {
+      const projectId = this.getId(item);
+      this.$store.commit('setObjectId', projectId);
+    },
+    getId(object) {
+      return object === null ? null : object.id;
     },
     onUpdate(item) {
       if (item.length > 0) {
@@ -129,9 +134,9 @@ export default {
     },
     showEntries(node) {
       this.objectId = node.id;
-      this.$store.commit('setObject', node);
-      this.$store.commit('setIsProject', !node.isLeaf);
-      if (node.isLeaf && this.objectId !== this.$store.state.login.objectId) {
+      // this.$store.commit('setObject', node);
+      // this.$store.commit('setIsProject', !node.isLeaf);
+      if (node.isLeaf && this.objectId !== this.$store.getters.objectId) {
         this.$store.commit('setObjectId', this.objectId);
         switch (this.$route.name) {
           case 'News':
@@ -151,6 +156,12 @@ export default {
     clean() {
       this.entries = [];
       this.params.data = [];
+    },
+    async deleteObject(item) {
+      const { id } = item;
+      await objectRepository.delete(id);
+      this.$root.$emit('showTree');
+      this.dialog = false;
     },
   },
   computed: {

@@ -25,7 +25,7 @@ export default {
   }),
   methods: {
     async drawMarkers() {
-      const { objectId } = this.$store.state.login;
+      const { objectId } = this.$store.getters;
       const { data } = await gisRepository.getByObjectId(objectId);
       data.forEach((el) => {
         if (el.latLng[0] != null && el.latLng[1] != null) {

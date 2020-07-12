@@ -2,8 +2,8 @@
   <div id="app">
     <v-app>
       <NavSidebar></NavSidebar>
-<!--      <ProjectsSidebar></ProjectsSidebar>-->
       <NewProject></NewProject>
+      <NewObject></NewObject>
       <router-view/>
     </v-app>
   </div>
@@ -11,14 +11,14 @@
 
 <script>
 import NavSidebar from './components/Sidebars/NavSidebar.vue';
-// import ProjectsSidebar from './components/Sidebars/ProjectsSidebar.vue';
-import NewProject from './components/Projects/NewProject.vue';
+import NewObject from './components/Dialogs/NewObject.vue';
+import NewProject from './components/Dialogs/NewProject.vue';
 
 export default {
   name: 'app',
   components: {
     NewProject,
-    // ProjectsSidebar,
+    NewObject,
     NavSidebar,
   },
 };

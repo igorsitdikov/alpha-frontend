@@ -19,7 +19,14 @@ const data = {
   isProject: false,
 };
 
-const getters = {};
+const getters = {
+  objectId: (state) => state.objectId,
+  role: (state) => state.role,
+  object: (state) => state.object,
+  userId: (state) => state.userId,
+  isProject: (state) => state.isProject,
+  authorized: (state) => state.authorized,
+};
 
 const mutations = {
   setRole(state, admin) {
