@@ -1,28 +1,60 @@
 <template>
-  <v-treeview
-    v-model="active"
-    :items="nodes"
-    return-object
-    :dense="dense"
-    :selectable="selectable"
-    :activatable="activatable"
-    :hoverable="hoverable"
-    :selection-type="selectionType"
-    :color="color"
-    :shaped="shaped"
-    :rounded="rounded"
-    :active="active"
-    @update:active="onUpdate"
-  >
-    <template v-slot:prepend="{ item, open }">
-      <v-icon v-if="!item.isLeaf">
-        {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-      </v-icon>
-      <v-icon v-else>
-        {{ 'mdi-file' }}
-      </v-icon>
-    </template>
-  </v-treeview>
+  <div>
+    <v-sheet class="pa-4 primary lighten-2">
+      <v-text-field
+        v-model="search"
+        label="Search Object by name"
+        dark
+        flat
+        solo-inverted
+        hide-details
+        clearable
+        clear-icon="mdi-close-circle-outline"
+      ></v-text-field>
+    </v-sheet>
+    <v-treeview
+      v-model="active"
+      :items="nodes"
+      return-object
+      :dense="dense"
+      :selectable="selectable"
+      :activatable="activatable"
+      :hoverable="hoverable"
+      :selection-type="selectionType"
+      :color="color"
+      :shaped="shaped"
+      :rounded="rounded"
+      :active="active"
+      :filter="filter"
+      :search="search"
+      @update:active="onUpdate"
+    >
+      <template slot="append" slot-scope="{ item }">
+        <template v-if="!item.isLeaf">
+          <v-btn icon small color="red" @click="addChild(item);">
+            <v-icon>mdi-folder-plus</v-icon>
+          </v-btn>
+          <v-btn icon small color="green" @click="addChild(item);">
+            <v-icon>mdi-file-plus</v-icon>
+          </v-btn>
+        </template>
+      </template>
+      <template v-slot:prepend="{ item, open }">
+        <v-icon v-if="!item.isLeaf">
+          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+        </v-icon>
+        <v-icon v-else>
+          {{ 'mdi-file' }}
+        </v-icon>
+      </template>
+    </v-treeview>
+    <v-btn icon x-large color="red" @click="addChild(null);">
+      <v-icon>mdi-folder-plus</v-icon>
+    </v-btn>
+    <v-btn icon x-large color="green" @click="addChild(null);">
+      <v-icon>mdi-file-plus</v-icon>
+    </v-btn>
+  </div>
 </template>
 
 <script>
@@ -34,6 +66,8 @@ const objectRepository = RepositoryFactory.get('objects');
 export default {
   name: 'FolderTreeView',
   data: () => ({
+    search: null,
+    caseSensitive: false,
     objectId: 'null',
     userId: 'null',
     nodes: [],
@@ -63,6 +97,19 @@ export default {
     });
   },
   methods: {
+    addChild(item) {
+      console.log(item);
+      // if (!item.children) {
+      //   this.$set(item, "children", []);
+      // }
+      //
+      // const name = `${item.name} (${item.children.length})`;
+      // const id = this.nextId++;
+      // item.children.push({
+      //   id,
+      //   name
+      // });
+    },
     onUpdate(item) {
       if (item.length > 0) {
         const node = item[item.length - 1];
@@ -104,6 +151,13 @@ export default {
     clean() {
       this.entries = [];
       this.params.data = [];
+    },
+  },
+  computed: {
+    filter() {
+      return this.caseSensitive
+        ? (item, search, textKey) => item[textKey].indexOf(search) > -1
+        : undefined;
     },
   },
 };

@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <NavSidebar></NavSidebar>
-      <ProjectsSidebar></ProjectsSidebar>
+<!--      <ProjectsSidebar></ProjectsSidebar>-->
       <NewProject></NewProject>
       <router-view/>
     </v-app>
@@ -11,14 +11,14 @@
 
 <script>
 import NavSidebar from './components/Sidebars/NavSidebar.vue';
-import ProjectsSidebar from './components/Sidebars/ProjectsSidebar.vue';
+// import ProjectsSidebar from './components/Sidebars/ProjectsSidebar.vue';
 import NewProject from './components/Projects/NewProject.vue';
 
 export default {
   name: 'app',
   components: {
     NewProject,
-    ProjectsSidebar,
+    // ProjectsSidebar,
     NavSidebar,
   },
 };
