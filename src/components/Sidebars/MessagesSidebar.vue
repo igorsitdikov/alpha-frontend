@@ -12,7 +12,7 @@
       <v-list-item-title>Messages count: {{messages.length}}</v-list-item-title>
       <v-btn
         icon
-        @click.stop="toggle = !toggle"
+        @click.stop="hideMessageSidebar"
       >
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
@@ -71,6 +71,9 @@ export default {
         formattedDate = `${formattedDate} ${pieces[1].split('.')[0]}`;
       }
       return formattedDate;
+    },
+    hideMessageSidebar() {
+      this.$root.$emit('hideMessageSidebar');
     },
   },
 };

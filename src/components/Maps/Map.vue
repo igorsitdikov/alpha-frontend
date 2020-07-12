@@ -76,6 +76,14 @@ export default {
     coordinatesGis: Array,
     loading: Boolean,
   },
+  beforeDestroy() {
+    this.$root.$off('hideMessageSidebar');
+  },
+  mounted() {
+    this.$root.$on('hideMessageSidebar', () => {
+      this.visible = false;
+    });
+  },
   methods: {
     getDateString(date) {
       return date.toJSON()
