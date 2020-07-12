@@ -23,7 +23,7 @@
         </template>
         <template v-slot:item.urls="{ item }">
           <div v-for="(url, index) in item.urls" :key="index">
-            <a :href="url" dark>{{ url }}</a>
+            <a :href="url" target="_blank">{{ url }}</a>
           </div>
         </template>
         <template v-slot:expanded-item="{ headers, item }">
