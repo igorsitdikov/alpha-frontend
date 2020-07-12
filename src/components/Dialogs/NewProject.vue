@@ -11,7 +11,7 @@
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-col cols="12">
                   <v-text-field
-                    :rules="projectRules"
+                    :rules="nameRules"
                     v-model="name"
                     label="Project name*"
                     required></v-text-field>
@@ -40,7 +40,7 @@ export default {
   data: () => ({
     isProject: true,
     valid: true,
-    projectRules: [
+    nameRules: [
       (v) => !!v || 'Name is required',
     ],
     parentId: null,

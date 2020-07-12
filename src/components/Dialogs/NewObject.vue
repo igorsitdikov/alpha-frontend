@@ -11,7 +11,7 @@
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-col cols="12">
                   <v-text-field
-                    :rules="projectRules"
+                    :rules="nameRules"
                     v-model="name"
                     label="Object name*"
                     required></v-text-field>
@@ -67,6 +67,9 @@ export default {
     isProject: false,
     valid: true,
     queries: [{}],
+    nameRules: [
+      (v) => !!v || 'Name is required',
+    ],
     options: [
       {
         text: 'Twitter',
